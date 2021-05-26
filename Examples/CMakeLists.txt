@@ -69,6 +69,10 @@ macro(add_language_subdirectory lang)
   endif()
 endmacro()
 
+
+
+add_subdirectory( Java )
+
 if ( BUILD_TESTING )
   add_subdirectory( test )
 
