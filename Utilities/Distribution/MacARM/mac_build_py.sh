@@ -4,28 +4,13 @@
 # This script is hard coded to point to the installed location
 # of the Python.org package distrbution of Python 3.8 or 3.9.
 
-# Default to 3.8
-PY_MAJOR=3
-PY_MINOR=8
-PY_VERSION=3.8
 
-if [ "$1" == "3.9" ]
-then
-    PY_MAJOR=3
-    PY_MINOR=9
-    PY_VERSION=3.9
-elif [ "$1" == "3.10" ]
-then
-    PY_MAJOR=3
-    PY_MINOR=10
-    PY_VERSION=3.10
-elif [ "$1" == "3.11" ]
-then
-    PY_MAJOR=3
-    PY_MINOR=11
-    PY_VERSION=3.11
-fi
+PY_VERSION=${1:-3.8}
 
+version_split=( ${PY_VERSION//./ } )
+
+PY_MAJOR=${version_split[0]}
+PY_MINOR=${version_split[1]}
 
 PY_DIR=/Library/Frameworks/Python.framework/Versions/${PY_VERSION}
 echo $PY_DIR

@@ -45,7 +45,7 @@ pushd $COREBINARYDIRECTORY
 sh $SCRIPT_DIR/mac_build_core.sh
 popd
 
-for version in 3.8 3.9 3.10 3.11
+for version in 3.8 3.9 3.10 3.11 3.12
 do
     mkdir -p $COREBINARYDIRECTORY/py$version
     pushd $COREBINARYDIRECTORY/py$version
