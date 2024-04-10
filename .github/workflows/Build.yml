@@ -29,6 +29,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       CTEST_SOURCE_DIRECTORY: "${{ github.workspace }}"
+      CTEST_BINARY_DIRECTORY: "${{ github.workspace }}/bld"
     strategy:
       max-parallel: 4
       matrix:
@@ -38,21 +39,12 @@ jobs:
             cmake-generator: "Ninja"
             ctest-cache: |
               WRAP_PYTHON:BOOL=ON
-              WRAP_JAVA:BOOL=OFF
-              WRAP_CSHARP:BOOL=OFF
-              CMAKE_JOB_POOL_COMPILE:STRING=compile
-              CMAKE_JOB_POOL_LINK:STRING=link
-              CMAKE_JOB_POOLS:STRING=compile=2;link=1
-          - os: macos-14
-            cmake-build-type: "Debug"
-            cmake-generator: "Ninja"
-            ctest-cache: |
-              WRAP_PYTHON:BOOL=ON
-              WRAP_JAVA:BOOL=OFF
-              WRAP_CSHARP:BOOL=OFF
-              CMAKE_JOB_POOL_COMPILE:STRING=compile
-              CMAKE_JOB_POOL_LINK:STRING=link
-              CMAKE_JOB_POOLS:STRING=compile=2;link=1
+              CMAKE_CXX_FLAGS:STRING=-fvisibility=hidden -fvisibility-inlines-hidden
+              CMAKE_C_FLAGS:STRING=-fvisibility=hidden
+              CMAKE_CXX_VISIBILITY_PRESET:STRING=hidden
+              CMAKE_VISIBILITY_INLINES_HIDDEN:BOOL=ON
+              SimpleITK_EXPLICIT_INSTANTIATION:BOOL=ON
+
     steps:
     - uses: actions/checkout@v4
       with:
@@ -100,7 +92,7 @@ jobs:
         CTEST_OUTPUT_ON_FAILURE: 1
         CTEST_CACHE: |
           WRAP_DEFAULT:BOOL=OFF
-          BUILD_EXAMPLES:BOOL=OFF
+          BUILD_EXAMPLES:BOOL=ON
           BUILD_TESTING:BOOL=ON
           Python_EXECUTABLE:FILEPATH=${{ steps.cpy.outputs.python-path }}
           ${{ matrix.ctest-cache }}
@@ -112,9 +104,4 @@ jobs:
 
         cmake --version
         ninja --version
-        ctest -S ${CTEST_SOURCE_DIRECTORY}/.github/workflows/github_actions.cmake -VV -j 2
-    - name: Build Pyhon 3.11
-      continue-on-error: true
-      run: |
-        echo "Python: ${{ steps.cpy.outputs.python-path }}"
-        ctest -S ${CTEST_SOURCE_DIRECTORY}/.github/workflows/scripts/mac_build_python.sh -VV -j 2
+        ctest -S ${CTEST_SOURCE_DIRECTORY}/.github/workflows/github_actions.cmake -VV
