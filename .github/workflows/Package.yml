@@ -58,9 +58,10 @@ jobs:
       - name: Upload Wheels
         uses: actions/upload-artifact@v4
         with:
-          name: python-wheels-${{ matrix.os }}
+          name: artifacts-${{ matrix.os }}
           path: |
             Utilities/Distribution/manylinux/wheelhouse/*.whl
+            Utilities/Distribution/manylinux/SimpleITK*.zip
 
   build:
 
@@ -196,6 +197,7 @@ jobs:
       - name: Upload Wheels
         uses: actions/upload-artifact@v4
         with:
-          name: python-wheels-${{ matrix.os }}
+          name: artifacts-${{ matrix.os }}
           path: |
             ${{ github.workspace }}/artifacts/*.whl
+            ${{ github.workspace }}/artifacts/*.zip
