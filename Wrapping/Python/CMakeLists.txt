@@ -44,18 +44,7 @@ if(SimpleITK_PYTHON_EGG)
   )
 endif()
 
-if(SKBUILD)
-  if(SKBUILD_SABI_VERSION STREQUAL "3.11")
-    set(SimpleITK_PYTHON_USE_LIMITED_API ON)
-  elseif(SKBUILD_SABI_VERSION STREQUAL "")
-    set(SimpleITK_PYTHON_USE_LIMITED_API OFF)
-  else()
-    message(
-      FATAL_ERROR
-      "Unsupported SKBUILD_SABI_VERSION: ${SKBUILD_SABI_VERSION}"
-    )
-  endif()
-elseif(
+if(
   CMAKE_VERSION
     VERSION_GREATER_EQUAL
     "3.26"
@@ -72,12 +61,26 @@ elseif(
 else()
   set(_SimpleITK_PYTHON_USE_LIMITED_API_DEFAULT OFF)
 endif()
-option(
-  SimpleITK_PYTHON_USE_LIMITED_API
-  "Use Python limited API, for minor version compatibility."
-  ${_SimpleITK_PYTHON_USE_LIMITED_API_DEFAULT}
-)
-mark_as_advanced(SimpleITK_PYTHON_USE_LIMITED_API)
+
+if(SKBUILD)
+  if(SKBUILD_SABI_VERSION STREQUAL "3.11")
+    set(SimpleITK_PYTHON_USE_LIMITED_API ON)
+  elseif(SKBUILD_SABI_VERSION STREQUAL "")
+    set(SimpleITK_PYTHON_USE_LIMITED_API OFF)
+  else()
+    message(
+      FATAL_ERROR
+      "Unsupported SKBUILD_SABI_VERSION: ${SKBUILD_SABI_VERSION}"
+    )
+  endif()
+else()
+  option(
+    SimpleITK_PYTHON_USE_LIMITED_API
+    "Use Python limited API, for minor version compatibility."
+    ${_SimpleITK_PYTHON_USE_LIMITED_API_DEFAULT}
+  )
+  mark_as_advanced(SimpleITK_PYTHON_USE_LIMITED_API)
+endif()
 
 if(SimpleITK_PYTHON_USE_LIMITED_API)
   find_package(
