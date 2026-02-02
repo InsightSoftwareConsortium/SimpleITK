@@ -12,8 +12,8 @@ set(
 )
 mark_as_advanced(ITK_GIT_REPOSITORY)
 
-# The commit contains the ExternaData changes to work with SimpleITK
-set(_DEFAULT_ITK_GIT_TAG "92e815d50e897830a899a79e7fe9a80e5734380d")
+# Merge of Modernization of ITK Modular System
+set(_DEFAULT_ITK_GIT_TAG "5ddc558191b9527c7545849aee6638262d6120a8")
 set(
   ITK_GIT_TAG
   "${_DEFAULT_ITK_GIT_TAG}"
