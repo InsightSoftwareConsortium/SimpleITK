@@ -192,32 +192,8 @@ if(NOT SimpleITK_INSTALL_PACKAGE_DIR)
 endif()
 
 function(sitk_install_exported_target tgt)
-  # Remove the build tree's SimpleITKTargets file if this is the first call:
-  get_property(first_time GLOBAL PROPERTY SimpleITK_FIRST_EXPORTED_TARGET)
-  if(NOT first_time)
-    file(REMOVE ${CMAKE_BINARY_DIR}/SimpleITKTargets.cmake)
-    set_property(
-      GLOBAL
-      PROPERTY
-        SimpleITK_FIRST_EXPORTED_TARGET
-          1
-    )
-  endif()
-
   get_target_property(type ${tgt} TYPE)
-  if(
-    type
-      STREQUAL
-      "STATIC_LIBRARY"
-    OR
-      type
-        STREQUAL
-        "MODULE_LIBRARY"
-    OR
-      type
-        STREQUAL
-        "SHARED_LIBRARY"
-  )
+  if(type IN_LIST "STATIC_LIBRARY;MODULE_LIBRARY;SHARED_LIBRARY")
     set_property(
       TARGET
         ${tgt}
@@ -241,13 +217,7 @@ function(sitk_install_exported_target tgt)
     )
   endif()
 
-  export(
-    TARGETS
-      ${tgt}
-    APPEND
-    FILE "${CMAKE_BINARY_DIR}/SimpleITKTargets.cmake"
-  )
-
+  # Exports are used for both build and install tree
   install(
     TARGETS
       ${tgt}
@@ -505,6 +475,11 @@ install(
     ${SimpleITK_DOC_FILES}
   DESTINATION "${SimpleITK_INSTALL_DOC_DIR}"
   COMPONENT Runtime
+)
+
+export(
+  EXPORT SimpleITKTargets
+  FILE "${CMAKE_BINARY_DIR}/SimpleITKTargets.cmake"
 )
 
 #------------------------------------------------------------------------------
