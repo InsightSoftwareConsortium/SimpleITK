@@ -3,6 +3,9 @@
 
 include(FetchContent)
 
+# Set policy to allow normal variable to override set CACHE variables
+set(CMAKE_POLICY_DEFAULT_CMP0126 NEW)
+
 # Set Elastix Git repository and tag (shared)
 include("${CMAKE_CURRENT_LIST_DIR}/sitkElastixGitOptions.cmake")
 
@@ -17,6 +20,8 @@ endif()
 set(ELASTIX_BUILD_EXECUTABLE OFF)
 set(ELASTIX_USE_OPENMP "${SimpleITK_ELASTIX_USE_OPENMP}")
 set(ELASTIX_USE_OPENCL "${SimpleITK_ELASTIX_USE_OPENCL}")
+
+set(ELASTIX_USE_VTK OFF)
 
 set(ELASTIX_IMAGE_2D_PIXELTYPES "float")
 set(ELASTIX_IMAGE_3D_PIXELTYPES "float")
@@ -135,23 +140,22 @@ FetchContent_Declare(
   GIT_TAG "${ELASTIX_GIT_TAG}"
   EXCLUDE_FROM_ALL
   FIND_PACKAGE_ARGS
-    NAMES
-    Elastix
 )
 
 FetchContent_MakeAvailable(Elastix)
 
 # Check if FetchContent used find_package() or fetched from source
 FetchContent_GetProperties(Elastix)
-if(Elastix_SOURCE_DIR)
+if(elastix_SOURCE_DIR)
   message(STATUS "Elastix fetched from repository and built from source")
-  message(STATUS "  Source directory: ${Elastix_SOURCE_DIR}")
-  message(STATUS "  Binary directory: ${Elastix_BINARY_DIR}")
-  set(Elastix_DIR "${Elastix_BINARY_DIR}")
+  message(STATUS "  Source directory: ${elastix_SOURCE_DIR}")
+  message(STATUS "  Binary directory: ${elastix_BINARY_DIR}")
+
+  set(Elastix_DIR "${elastix_BINARY_DIR}")
   # Include the real ElastixConfig.cmake to populate ELASTIX_INCLUDE_DIRS,
   # ELASTIX_LIBRARIES, ELASTIX_CONFIG_TARGETS_FILE, etc. The config's own
   # guard (NOT TARGET elastix_lib) prevents re-importing already-defined targets.
-  include("${Elastix_BINARY_DIR}/ElastixConfig.cmake")
+  include("${elastix_BINARY_DIR}/ElastixConfig.cmake")
 elseif(DEFINED Elastix_FOUND)
   message(STATUS "Elastix found via find_package()")
   # Elastix_DIR should already be set by find_package()
@@ -159,7 +163,6 @@ else()
   message(FATAL_ERROR "Elastix configuration failed - no targets available")
 endif()
 
-# These options conflict with SimpleITK.
 # Allow a user's cache variable to be respected.
 unset(BUILD_TESTING)
 unset(BUILD_EXAMPLES)

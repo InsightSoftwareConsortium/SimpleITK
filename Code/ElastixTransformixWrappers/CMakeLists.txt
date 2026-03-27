@@ -1,10 +1,5 @@
-find_package(Elastix CONFIG REQUIRED)
-
-# Include the targets file when Elastix was found as a pre-installed package.
-# When Elastix is built via FetchContent the targets already exist in the build
-# and must not be imported again.
-if(ELASTIX_CONFIG_TARGETS_FILE AND NOT TARGET elastix_lib)
-  include(${ELASTIX_CONFIG_TARGETS_FILE})
+if(NOT TARGET elastix_lib)
+  find_package(Elastix CONFIG REQUIRED)
 endif()
 
 set(
