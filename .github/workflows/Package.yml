@@ -90,7 +90,7 @@ jobs:
       max-parallel: 5
       matrix:
         include:
-          - os: macos-13
+          - os: macos-15-intel
             cmake-build-type: "Release"
             cmake-generator: "Ninja"
             ctest-cache: |
@@ -183,7 +183,7 @@ jobs:
 
       - name: Generate Source and Data Archives
         shell: bash
-        if: matrix.os == 'macos-13'
+        if: matrix.os == 'macos-15-intel'
         run: |
           set -xe
 
@@ -200,6 +200,7 @@ jobs:
           rm -rf ${COREBINARYDIRECTORY}/SimpleITK-build
 
       - name: Package CSharp
+        if: runner.os != 'macOS'
         uses: ./.github/actions/package_csharp
         with:
           continue-on-error: true
