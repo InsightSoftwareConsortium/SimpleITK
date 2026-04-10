@@ -1,7 +1,6 @@
-find_package(Elastix CONFIG REQUIRED)
-
-# included for the "transformix_lib" library
-include(${ELASTIX_CONFIG_TARGETS_FILE})
+if(NOT TARGET elastix_lib)
+  find_package(Elastix CONFIG REQUIRED)
+endif()
 
 set(
   use_itk_modules
