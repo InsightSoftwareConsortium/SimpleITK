@@ -34,7 +34,7 @@ EOM
 
 
 export CTEST_CACHE
-export CTEST_BINARY_DIRECTORY="${GITHUB_WORKSPACE}/py${PYTHON_ABI_TAG}"
+export CTEST_BINARY_DIRECTORY="${GITHUB_WORKSPACE}/${PYTHON_ABI_TAG}"
 
 export CC=cl.exe
 export CXX=cl.exe
@@ -42,7 +42,6 @@ export CXX=cl.exe
 ctest -D dashboard_source_config_dir="Wrapping/Python" \
       -D "dashboard_track:STRING=Package" \
       -D "CTEST_BUILD_NAME:STRING=${RUNNER_NAME}-${GITHUB_JOB}-${PYTHON_ABI_TAG}" \
-      -D "CTEST_CMAKE_GENERATOR:STRING=Ninja" \
       -S "${CTEST_SOURCE_DIRECTORY}/.github/workflows/github_actions.cmake" -VV -j 2
 
 ( cd ${CTEST_BINARY_DIRECTORY} && cmake --build "${CTEST_BINARY_DIRECTORY}" --config "${CTEST_CONFIGURATION_TYPE}" --target dist )

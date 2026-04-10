@@ -88,6 +88,9 @@ jobs:
       DASHBOARD_BRANCH_DIRECTORY: "${{ github.workspace }}/SimpleITK-dashboard"
       CTEST_SOURCE_DIRECTORY: "${{ github.workspace }}"
       CTEST_CONFIGURATION_TYPE: "${{ matrix.cmake-build-type }}"
+      CTEST_CMAKE_GENERATOR: "${{ matrix.cmake-generator }}"
+      CTEST_CMAKE_GENERATOR_TOOLSET: "${{ matrix.cmake-generator-toolset }}"
+      CTEST_CMAKE_GENERATOR_PLATFORM: "${{ matrix.cmake-generator-platform }}"
     strategy:
       fail-fast: false
       max-parallel: 5
@@ -171,9 +174,6 @@ jobs:
         env:
           ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS: 2
           CTEST_BINARY_DIRECTORY: "${{ env.COREBINARYDIRECTORY }}"
-          CTEST_CMAKE_GENERATOR: "${{ matrix.cmake-generator }}"
-          CTEST_CMAKE_GENERATOR_TOOLSET: "${{ matrix.cmake-generator-toolset }}"
-          CTEST_CMAKE_GENERATOR_PLATFORM: "${{ matrix.cmake-generator-platform }}"
           CTEST_OUTPUT_ON_FAILURE: 1
           CTEST_CACHE: |
             WRAP_DEFAULT:BOOL=OFF
