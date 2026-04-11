@@ -13,7 +13,7 @@ set(
 )
 mark_as_advanced(ELASTIX_GIT_REPOSITORY)
 
-set(_DEFAULT_ELASTIX_GIT_TAG "5.3.1") # March 21, 2026
+set(_DEFAULT_ELASTIX_GIT_TAG "af47e22") # April, 10 2026
 set(
   ELASTIX_GIT_TAG
   "${_DEFAULT_ELASTIX_GIT_TAG}"
