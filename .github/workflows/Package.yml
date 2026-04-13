@@ -255,6 +255,7 @@ jobs:
       - name: Docker Doxygen generation
         run: |
           docker run \
+                 --env SIMPLEITK_USE_ELASTIX=1 \
                  --mount type=bind,source=$GITHUB_WORKSPACE,destination=/work/SimpleITK,readonly \
                  --name sitk-dox simpleitk-doxygen
           mkdir -p artifacts
