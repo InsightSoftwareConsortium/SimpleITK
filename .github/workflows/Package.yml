@@ -49,7 +49,7 @@ jobs:
       - name: Build ${{ matrix.dockerfile }}
         shell: bash
         env:
-          PYTHON_VERSIONS: "cp310-cp310"
+          PYTHON_VERSIONS: "cp310-cp310 cp314-cp314t"
           BUILD_CSHARP: ${{ matrix.build_csharp }}
           BUILD_JAVA: ${{ matrix.build_java }}
           BUILD_PYTHON_LIMITED_API: 1
@@ -88,6 +88,9 @@ jobs:
       DASHBOARD_BRANCH_DIRECTORY: "${{ github.workspace }}/SimpleITK-dashboard"
       CTEST_SOURCE_DIRECTORY: "${{ github.workspace }}"
       CTEST_CONFIGURATION_TYPE: "${{ matrix.cmake-build-type }}"
+      CTEST_CMAKE_GENERATOR: "${{ matrix.cmake-generator }}"
+      CTEST_CMAKE_GENERATOR_TOOLSET: "${{ matrix.cmake-generator-toolset }}"
+      CTEST_CMAKE_GENERATOR_PLATFORM: "${{ matrix.cmake-generator-platform }}"
     strategy:
       fail-fast: false
       max-parallel: 5
@@ -126,6 +129,7 @@ jobs:
               ITK_C_OPTIMIZATION_FLAGS:STRING=
               ITK_CXX_OPTIMIZATION_FLAGS:STRING=
               SimpleITK_BUILD_DISTRIBUTE:BOOL=ON
+              CXXFLAGS:STRING= /MP
     steps:
       - uses: actions/checkout@v6
         with:
@@ -170,9 +174,6 @@ jobs:
         env:
           ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS: 2
           CTEST_BINARY_DIRECTORY: "${{ env.COREBINARYDIRECTORY }}"
-          CTEST_CMAKE_GENERATOR: "${{ matrix.cmake-generator }}"
-          CTEST_CMAKE_GENERATOR_TOOLSET: "${{ matrix.cmake-generator-toolset }}"
-          CTEST_CMAKE_GENERATOR_PLATFORM: "${{ matrix.cmake-generator-platform }}"
           CTEST_OUTPUT_ON_FAILURE: 1
           CTEST_CACHE: |
             WRAP_DEFAULT:BOOL=OFF
@@ -224,6 +225,12 @@ jobs:
         uses: ./.github/actions/package_python
         with:
           python-version: "3.10"
+          cmake_osx_architectures: ${{ matrix.cmake_osx_architectures || '' }}
+      - name: Package Python 3.14t
+        uses: ./.github/actions/package_python
+        with:
+          python-version: "3.14t"
+          continue-on-error: true
           cmake_osx_architectures: ${{ matrix.cmake_osx_architectures || '' }}
 
       - name: Upload Artifacts
