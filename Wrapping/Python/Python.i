@@ -45,9 +45,12 @@
 #endif
 %}
 
-%include "PythonDocstrings.i"
 %include "sitkPathType.i"
- //%feature("autodoc", "1");
+%feature("autodoc", "1");
+
+// Ignore \par Wiki Examples: sections in Doxygen comments; they are only
+// relevant to the ITK wiki and are not useful in Python docstrings.
+%feature("doxygen:ignore:par", range="line");
 
 // ignore overload methods of int type when there is an enum
 %ignore itk::simple::CastImageFilter::SetOutputPixelType( PixelIDValueType pixelID );
