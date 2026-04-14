@@ -53,6 +53,7 @@ jobs:
           BUILD_CSHARP: ${{ matrix.build_csharp }}
           BUILD_JAVA: ${{ matrix.build_java }}
           BUILD_PYTHON_LIMITED_API: 1
+          SIMPLEITK_USE_ELASTIX: 1
         run: |
           echo "BUILD_CSHARP: ${BUILD_CSHARP}"
           echo "BUILD_JAVA: ${BUILD_JAVA}"
@@ -62,6 +63,7 @@ jobs:
                --env BUILD_CSHARP \
                --env BUILD_JAVA \
                --env BUILD_PYTHON_LIMITED_API \
+               --env SIMPLEITK_USE_ELASTIX \
                --env SIMPLEITK_SRC_DIR="/work/src" \
                -v "${{ github.workspace }}:/work/src" \
                -v "${{ github.workspace }}/Utilities/Distribution/manylinux:/work/io" \
@@ -179,6 +181,7 @@ jobs:
             WRAP_DEFAULT:BOOL=OFF
             BUILD_EXAMPLES:BOOL=ON
             BUILD_TESTING:BOOL=ON
+            SimpleITK_USE_ELASTIX:BOOL=ON
             ${{ matrix.cmake_osx_architectures && format('CMAKE_OSX_ARCHITECTURES:STRING={0}', matrix.cmake_osx_architectures) || '' }}
             ${{ matrix.ctest-cache }}
         run: |
@@ -203,6 +206,18 @@ jobs:
         run: |
           rm -rf ${COREBINARYDIRECTORY}/ITK ${COREBINARYDIRECTORY}/ITK-build
           rm -rf ${COREBINARYDIRECTORY}/SimpleITK-build
+
+      - name: Package Python 3.11
+        uses: ./.github/actions/package_python
+        with:
+          python-version: 3.11
+          use_limited_api: true
+          cmake_osx_architectures: ${{ matrix.cmake_osx_architectures || '' }}
+      - name: Package Python 3.10
+        uses: ./.github/actions/package_python
+        with:
+          python-version: "3.10"
+          cmake_osx_architectures: ${{ matrix.cmake_osx_architectures || '' }}
       - name: Package CSharp
         if: runner.os != 'macOS'
         uses: ./.github/actions/package_csharp
@@ -232,7 +247,6 @@ jobs:
           python-version: "3.14t"
           continue-on-error: true
           cmake_osx_architectures: ${{ matrix.cmake_osx_architectures || '' }}
-
       - name: Upload Artifacts
         uses: actions/upload-artifact@v7
         with:
