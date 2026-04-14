@@ -46,12 +46,12 @@ set(
   -package
   "org.itk.simple"
   ${CMAKE_SWIG_GLOBAL_FLAGS}
+  -doxygen
 )
 set(
   SWIG_MODULE_SimpleITKJava_EXTRA_DEPS
   ${SWIG_EXTRA_DEPS}
   ${CMAKE_CURRENT_SOURCE_DIR}/Java.i
-  ${CMAKE_CURRENT_SOURCE_DIR}/JavaDoc.i
 )
 swig_add_module( SimpleITKJava java SimpleITK.i )
 target_link_libraries(
