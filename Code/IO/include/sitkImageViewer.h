@@ -107,11 +107,15 @@ public:
    * to the display application's executable.  For instance, on Windows when
    * using Fiji, one would use the full path to the ImageJ-win64.exe such as:
    *
-   *     'C:\Users\dave\Fiji.app\ImageJ-win64.exe'
+   * \code{.txt}
+   * C:\Users\dave\Fiji.app\ImageJ-win64.exe
+   * \endcode
    *
    * On Linux, \b app would be set to something like:
    *
-   *     '/home/dave/bin/Fiji.app/ImageJ-linux64'
+   * \code{.txt}
+   * /home/dave/bin/Fiji.app/ImageJ-linux64
+   * \endcode
    *
    * Using this method overrides the default application search.
    *
