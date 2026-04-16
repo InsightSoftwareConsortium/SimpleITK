@@ -123,9 +123,8 @@ set_source_files_properties(
 set(
   CMAKE_SWIG_FLAGS
   ${CMAKE_SWIG_GLOBAL_FLAGS}
-  -features
-  autodoc=1
   -keyword
+  -doxygen
 )
 if(SimpleITK_PYTHON_THREADS)
   set(
