@@ -67,8 +67,8 @@ mark_as_advanced(ITK_GIT_REPOSITORY)
 sitk_legacy_naming(ITK_GIT_REPOSITORY ITK_REPOSITORY)
 
 
-# ITK release-5.4 branch hash 2026-02-26
-set(_DEFAULT_ITK_GIT_TAG "6dcda761aa8021a06124741b1a88adb88d859b75")
+# ITK 5.4.6 release
+set(_DEFAULT_ITK_GIT_TAG "v5.4.6")
 set(ITK_GIT_TAG "${_DEFAULT_ITK_GIT_TAG}" CACHE STRING "Tag or hash for ITK git repo")
 mark_as_advanced(ITK_GIT_TAG)
 set(ITK_TAG_COMMAND GIT_TAG "${ITK_GIT_TAG}")
