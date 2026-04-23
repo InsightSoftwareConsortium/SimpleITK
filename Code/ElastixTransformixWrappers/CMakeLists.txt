@@ -36,6 +36,7 @@ target_link_libraries(
     SimpleITK_ITKCommon
     transformix_lib
     elastix_lib
+    ITK::ITKRegistrationCommonModule
 )
 target_compile_options(
   SimpleElastix
