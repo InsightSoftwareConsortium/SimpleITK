@@ -53,6 +53,7 @@ jobs:
               CMAKE_CXX_VISIBILITY_PRESET:STRING=hidden
               CMAKE_VISIBILITY_INLINES_HIDDEN:BOOL=ON
               SimpleITK_EXPLICIT_INSTANTIATION:BOOL=ON
+              SimpleITK_USE_SYSTEM_SWIG:BOOL=OFF
           - os: mac-arm64
             name: mac-arm64-python-elastix-python
             cmake-build-type: "Release"
@@ -72,6 +73,7 @@ jobs:
               WRAP_PYTHON:BOOL=ON
               WRAP_R:BOOL=ON
               SimpleITK_USE_ELASTIX:BOOL=ON
+              SimpleITK_USE_SYSTEM_SWIG:BOOL=OFF
               CMAKE_C_COMPILER_LAUNCHER:STRING=ccache
               CMAKE_CXX_COMPILER_LAUNCHER:STRING=ccache
           - os: ubuntu-24.04-arm
