@@ -1,0 +1,31 @@
+name: 'External Data Cache'
+description: 'Restore (and optionally save) the CMake ExternalData object store cache'
+inputs:
+  path:
+    description: 'Path to the ExternalData object store directory'
+    required: false
+    default: '${{ runner.temp }}/.ExternalData'
+  save:
+    description: 'Whether to save the cache after the job (set to false for PRs)'
+    required: false
+    default: 'true'
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/cache/restore@v5
+      if: inputs.save != 'true'
+      with:
+        path: ${{ inputs.path }}
+        key: external-data-v2-${{ hashFiles('Testing/Data/**') }}
+        enableCrossOsArchive: true
+        restore-keys: |
+          external-data-v2-
+    - uses: actions/cache@v5
+      if: inputs.save == 'true'
+      with:
+        path: ${{ inputs.path }}
+        key: external-data-v2-${{ hashFiles('Testing/Data/**') }}
+        enableCrossOsArchive: true
+        restore-keys: |
+          external-data-v2-
