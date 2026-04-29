@@ -174,10 +174,11 @@ jobs:
       uses: actions/cache@v5
       with:
         path: ${{ runner.temp }}/.ccache
-        key: ccache-v1-${{ matrix.name }}-${{ github.head_ref && format('{0}-{1}', github.base_ref, github.head_ref) || github.ref_name }}-${{ github.sha }}
+        # GHA scoping rules make branch names in the key redundant:
+        # restore-keys are searched on the current branch first, then the
+        # default branch, so PRs naturally fall back to the latest main cache.
+        key: ccache-v1-${{ matrix.name }}-${{ github.sha }}
         restore-keys: |
-          ccache-v1-${{ matrix.name }}-${{ github.head_ref && format('{0}-{1}', github.base_ref, github.head_ref) || github.ref_name }}-
-          ccache-v1-${{ matrix.name }}-${{ github.head_ref && github.base_ref || github.ref_name }}-
           ccache-v1-${{ matrix.name }}-
     - name: Configure ccache
       if: matrix.use-ccache
