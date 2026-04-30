@@ -386,10 +386,6 @@ add_subdirectory(Code)
 add_subdirectory(Wrapping)
 
 #------------------------------------------------------------------------------
-# ITK uses KWStyle for checking the coding style
-include(${SimpleITK_SOURCE_DIR}/Utilities/KWStyle/KWStyle.cmake)
-
-#------------------------------------------------------------------------------
 # set things up for testing, if enabled
 
 if(BUILD_TESTING)

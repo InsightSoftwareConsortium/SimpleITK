@@ -16,11 +16,11 @@
 *.sh             crlf=input
 *.sh.in          crlf=input
 
-*.c              whitespace=tab-in-indent,no-lf-at-eof  hooks.style=KWStyle,uncrustify
-*.h              whitespace=tab-in-indent,no-lf-at-eof  hooks.style=KWStyle,uncrustify
-*.cxx            whitespace=tab-in-indent,no-lf-at-eof  hooks.style=KWStyle,uncrustify
-*.hxx            whitespace=tab-in-indent,no-lf-at-eof  hooks.style=KWStyle,uncrustify
-*.txx            whitespace=tab-in-indent,no-lf-at-eof  hooks.style=KWStyle,uncrustify
+*.c              whitespace=tab-in-indent,no-lf-at-eof
+*.h              whitespace=tab-in-indent,no-lf-at-eof
+*.cxx            whitespace=tab-in-indent,no-lf-at-eof
+*.hxx            whitespace=tab-in-indent,no-lf-at-eof
+*.txx            whitespace=tab-in-indent,no-lf-at-eof
 *.txt            whitespace=tab-in-indent,no-lf-at-eof
 *.cmake          whitespace=tab-in-indent,no-lf-at-eof
 *.i              whitespace=tab-in-indent,no-lf-at-eof  hooks.MaxObjectKiB=2048
