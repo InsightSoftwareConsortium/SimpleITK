@@ -86,6 +86,7 @@ jobs:
   build:
     if: github.repository == 'SimpleITK/SimpleITK'
     runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.continue-on-error || false }}
     env:
       COREBINARYDIRECTORY:  "${{ github.workspace }}/bld"
       ExternalData_OBJECT_STORES: "${{ github.workspace }}/.ExternalData"
@@ -127,6 +128,19 @@ jobs:
             cmake-generator: "Visual Studio 17 2022"
             cmake-generator-toolset: v142,host=x64
             cmake-generator-platform: x64
+            ctest-cache: |
+              BUILD_EXAMPLES:BOOL=ON
+              BUILD_TESTING:BOOL=ON
+              ITK_C_OPTIMIZATION_FLAGS:STRING=
+              ITK_CXX_OPTIMIZATION_FLAGS:STRING=
+              SimpleITK_BUILD_DISTRIBUTE:BOOL=ON
+              CXXFLAGS:STRING= /MP
+          - os: windows-11-arm
+            cmake-build-type: "Release"
+            cmake-generator: "Visual Studio 17 2022"
+            cmake-generator-toolset: v143,host=ARM64
+            cmake-generator-platform: ARM64
+            vcvar-options: "arm64 -vcvars_ver=14.3"
             ctest-cache: |
               BUILD_EXAMPLES:BOOL=ON
               BUILD_TESTING:BOOL=ON
@@ -200,13 +214,15 @@ jobs:
           rm -rf ${COREBINARYDIRECTORY}/SimpleITK-build
 
       - name: Package CSharp
-        if: runner.os != 'macOS'
+        # CSHARP_PLATFORM is hardcoded to x64 in the package_csharp action; not yet wired up for ARM64.
+        if: runner.os != 'macOS' && matrix.os != 'windows-11-arm'
         uses: ./.github/actions/package_csharp
         with:
           continue-on-error: true
           cmake_osx_architectures: ${{ matrix.cmake_osx_architectures || '' }}
       - name: Package Java
-        if: ${{ !matrix.cmake_osx_architectures }}
+        # Windows ARM64 JDK availability on the runner image is unverified; not yet wired up for ARM64.
+        if: ${{ !matrix.cmake_osx_architectures && matrix.os != 'windows-11-arm' }}
         uses: ./.github/actions/package_java
         with:
           continue-on-error: true
@@ -217,17 +233,22 @@ jobs:
           python-version: 3.11
           use_limited_api: true
           cmake_osx_architectures: ${{ matrix.cmake_osx_architectures || '' }}
+          VCVAR_OPTIONS: ${{ matrix.vcvar-options || 'amd64 -vcvars_ver=14.2' }}
       - name: Package Python 3.10
+        # actions/setup-python never published a 3.10 build for win32/arm64; only 3.11+ is available there.
+        if: matrix.os != 'windows-11-arm'
         uses: ./.github/actions/package_python
         with:
           python-version: "3.10"
           cmake_osx_architectures: ${{ matrix.cmake_osx_architectures || '' }}
+          VCVAR_OPTIONS: ${{ matrix.vcvar-options || 'amd64 -vcvars_ver=14.2' }}
       - name: Package Python 3.14t
         uses: ./.github/actions/package_python
         with:
           python-version: "3.14t"
           continue-on-error: true
           cmake_osx_architectures: ${{ matrix.cmake_osx_architectures || '' }}
+          VCVAR_OPTIONS: ${{ matrix.vcvar-options || 'amd64 -vcvars_ver=14.2' }}
       - name: Package Python 3.15t (pre-release)
         uses: ./.github/actions/package_python
         with:
@@ -235,6 +256,7 @@ jobs:
           allow_prereleases: true
           continue-on-error: true
           cmake_osx_architectures: ${{ matrix.cmake_osx_architectures || '' }}
+          VCVAR_OPTIONS: ${{ matrix.vcvar-options || 'amd64 -vcvars_ver=14.2' }}
       - name: Upload Artifacts
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
