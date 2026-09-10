@@ -93,6 +93,16 @@ jobs:
               ITK_USE_BUILD_DIR:BOOL=ON
               CXXFLAGS:STRING= /wd4251 /MP
 
+          - os: windows-11-arm
+            cmake-build-type: "Release"
+            cmake-generator: "Visual Studio 17 2022"
+            cmake-generator-toolset: v143,host=ARM64
+            cmake-generator-platform: ARM64
+            use-superbuild: true
+            ctest-cache: |
+              WRAP_PYTHON:BOOL=ON
+              CXXFLAGS:STRING= /wd4251 /MP
+
           - os: ubuntu-24.04-arm
             cmake-build-type: "Release"
             cmake-generator: "Ninja"
